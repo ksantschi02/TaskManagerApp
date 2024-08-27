@@ -5,8 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TaskManagerApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="400">
     <Grid>
-
+        <ListBox x:Name="TodoListBox" Margin="10,10,10,0" VerticalAlignment="Top" Height="360">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}" Checked="CheckBox_Checked"/>
+                        <TextBlock Text="{Binding Text}" Margin="5,0,0,0"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Margin="10">
+            <TextBox x:Name="NewItemTextBox" Width="200" Margin="0,0,10,0" KeyDown="NewItemTextBox_KeyDown"/>
+            <Button Content="Add Item" Click="AddItemButton_Click"/>
+            <Button Content="Clear List" Click="ClearListButton_Click" Margin="10,0,0,0"/>
+        </StackPanel>
     </Grid>
 </Window>
