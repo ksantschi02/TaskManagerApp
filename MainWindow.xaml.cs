@@ -6,6 +6,8 @@ using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
+using System.Windows.Media.Animation;
+using System.Windows.Threading;
 
 namespace TaskManagerApp
 {
@@ -46,6 +48,21 @@ namespace TaskManagerApp
             TodoItems = new ObservableCollection<TodoItem>();
             TodoListBox.ItemsSource = TodoItems;
             LoadTodoList();
+            UpdateWindowTitle();
+
+            PositionWindowBottomRight();
+            this.Topmost = true;
+        }
+
+        private void PositionWindowBottomRight()
+        {
+            // Get the dimensions of the primary screen
+            double screenWidth = SystemParameters.PrimaryScreenWidth;
+            double screenHeight = SystemParameters.PrimaryScreenHeight;
+
+            // Set the window's position to the bottom-right corner
+            this.Left = screenWidth - this.Width - 15;
+            this.Top = screenHeight - this.Height - 40;
         }
 
         private void AddItemButton_Click(object sender, RoutedEventArgs e)
@@ -68,6 +85,7 @@ namespace TaskManagerApp
             {
                 TodoItems.Add(new TodoItem { Text = NewItemTextBox.Text });
                 NewItemTextBox.Clear();
+                UpdateWindowTitle();
             }
         }
 
@@ -75,17 +93,57 @@ namespace TaskManagerApp
         {
             if (sender is CheckBox checkBox && checkBox.DataContext is TodoItem item)
             {
-                if (item.IsChecked)
+                FadeOutAndRemoveItem(item);
+            }
+        }
+
+        private void FadeOutAndRemoveItem(TodoItem item)
+        {
+            var listBoxItem = TodoListBox.ItemContainerGenerator.ContainerFromItem(item) as ListBoxItem;
+            if (listBoxItem != null)
+            {
+                var storyboard = new Storyboard();
+                var fadeOutAnimation = new DoubleAnimation
+                {
+                    From = 1.0,
+                    To = 0.0,
+                    Duration = new Duration(TimeSpan.FromSeconds(1))
+                };
+                Storyboard.SetTarget(fadeOutAnimation, listBoxItem);
+                Storyboard.SetTargetProperty(fadeOutAnimation, new PropertyPath("Opacity"));
+                storyboard.Children.Add(fadeOutAnimation);
+
+                storyboard.Completed += (s, e) =>
                 {
                     TodoItems.Remove(item);
-                    TodoItems.Add(item);
-                }
+                    UpdateWindowTitle();
+                };
+                storyboard.Begin();
+            }
+            else
+            {
+                // If ListBoxItem is null, just remove the item directly
+                TodoItems.Remove(item);
+                UpdateWindowTitle();
             }
         }
 
         private void ClearListButton_Click(object sender, RoutedEventArgs e)
         {
             TodoItems.Clear();
+            UpdateWindowTitle();
+        }
+
+        private void UpdateWindowTitle()
+        {
+            if (TodoItems.Count == 0)
+            {
+                this.Title = "All done!";
+            }
+            else
+            {
+                this.Title = $"{TodoItems.Count} tasks remaining!";
+            }
         }
 
         private void LoadTodoList()
@@ -98,6 +156,7 @@ namespace TaskManagerApp
                 {
                     TodoItems.Add(item);
                 }
+                UpdateWindowTitle();
             }
         }
 

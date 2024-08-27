@@ -5,7 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TaskManagerApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="400">
+        Title="To-Do List" Height="450" Width="361">
+    <Window.Resources>
+        <Storyboard x:Key="FadeOutStoryboard">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1.0" To="0.0" Duration="0:0:1.0" />
+        </Storyboard>
+    </Window.Resources>
     <Grid>
         <ListBox x:Name="TodoListBox" Margin="10,10,10,0" VerticalAlignment="Top" Height="360">
             <ListBox.ItemTemplate>
