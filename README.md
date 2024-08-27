@@ -1,4 +1,4 @@
-A test of WPF and .NET capabilities by creating a small standalone To-Do List Desktop Widget for personal usage. Anyone is free to use this
+A test of WPF and .NET capabilities by creating a small standalone To-Do List Desktop Widget for personal usage. Free for personal usage, not for commercial distribution.
 
 I may add further functionality later on, but that is yet to be determined
 List of features I may implement in the future:
