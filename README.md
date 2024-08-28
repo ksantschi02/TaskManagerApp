@@ -16,4 +16,4 @@ List of features I may implement in the future:
 - Possibly also name the tabs
 - Text wrapping (doesn't work quite so well at the moment)
 - Figure out how to minimize to system tray (might be a Windows feature that I haven't figured out)
-- Test saving feature. If I hard shut down my computer, will likely not save my to do list
+- Test saving feature. If I hard shut down my computer, will likely not save my to do list. One solution would be to just have it save every time an item is added to/checked off of the list.
