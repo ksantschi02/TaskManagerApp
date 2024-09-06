@@ -17,3 +17,6 @@ List of features I may implement in the future:
 - Text wrapping (doesn't work quite so well at the moment)
 - Figure out how to minimize to system tray (might be a Windows feature that I haven't figured out)
 - Test saving feature. If I hard shut down my computer, will likely not save my to do list. One solution would be to just have it save every time an item is added to/checked off of the list.
+- Possible web-based feature. Have user sign into google account, save to do list as csv to drive. For this purpose:
+  - Create second application for phone that communicates with same csv file. Allows user to add/check off items from phone, saves and updates over web.
+  - If possible, create interactive lock screen background that shows to do list
