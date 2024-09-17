@@ -86,6 +86,7 @@ namespace TaskManagerApp
                 TodoItems.Add(new TodoItem { Text = NewItemTextBox.Text });
                 NewItemTextBox.Clear();
                 UpdateWindowTitle();
+                SaveTodoList();
             }
         }
 
@@ -94,6 +95,7 @@ namespace TaskManagerApp
             if (sender is CheckBox checkBox && checkBox.DataContext is TodoItem item)
             {
                 FadeOutAndRemoveItem(item);
+                SaveTodoList();
             }
         }
 
@@ -132,6 +134,7 @@ namespace TaskManagerApp
         {
             TodoItems.Clear();
             UpdateWindowTitle();
+            SaveTodoList();
         }
 
         private void UpdateWindowTitle()
