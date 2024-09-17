@@ -12,12 +12,17 @@
         </Storyboard>
     </Window.Resources>
     <Grid>
-        <ListBox x:Name="TodoListBox" Margin="10,10,10,0" VerticalAlignment="Top" Height="360">
+        <ListBox x:Name="TodoListBox" Margin="10,10,10,0" VerticalAlignment="Top" Height="360"
+                 PreviewMouseLeftButtonDown="TodoListBox_PreviewMouseLeftButtonDown"
+                 PreviewMouseMove="TodoListBox_PreviewMouseMove"
+                 Drop="TodoListBox_Drop"
+                 DragOver="TodoListBox_DragOver"
+                 AllowDrop="True">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}" Checked="CheckBox_Checked"/>
-                        <TextBlock Text="{Binding Text}" Margin="5,0,0,0"/>
+                        <TextBlock Text="{Binding Text}" Margin="5,0,0,0" TextWrapping="Wrap" Width="250"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

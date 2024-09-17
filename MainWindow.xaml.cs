@@ -7,7 +7,8 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
-using System.Windows.Threading;
+
+
 
 namespace TaskManagerApp
 {
@@ -40,6 +41,7 @@ namespace TaskManagerApp
     public partial class MainWindow : Window
     {
         private const string FilePath = "todoList.json";
+        private Point _dragStartPoint;
         public ObservableCollection<TodoItem> TodoItems { get; set; }
 
         public MainWindow()
@@ -167,6 +169,61 @@ namespace TaskManagerApp
         {
             var json = JsonConvert.SerializeObject(TodoItems, Formatting.Indented);
             File.WriteAllText(FilePath, json);
+        }
+
+        private void TodoListBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _dragStartPoint = e.GetPosition(null);
+        }
+
+        private void TodoListBox_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                Point currentPos = e.GetPosition(null);
+                if (Math.Abs(currentPos.X - _dragStartPoint.X) > SystemParameters.MinimumHorizontalDragDistance ||
+                    Math.Abs(currentPos.Y - _dragStartPoint.Y) > SystemParameters.MinimumVerticalDragDistance)
+                {
+                    ListBox listBox = sender as ListBox;
+                    TodoItem selectedItem = (TodoItem)listBox.SelectedItem;
+                    if (selectedItem != null)
+                    {
+                        // Start the drag operation
+                        DragDrop.DoDragDrop(listBox, selectedItem, DragDropEffects.Move);
+                    }
+                }
+            }
+        }
+
+        private void TodoListBox_DragOver(object sender, DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent(typeof(TodoItem)))
+            {
+                e.Effects = DragDropEffects.None;
+            }
+            else
+            {
+                e.Effects = DragDropEffects.Move;
+            }
+            e.Handled = true;
+        }
+
+        private void TodoListBox_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(TodoItem)))
+            {
+                TodoItem droppedData = e.Data.GetData(typeof(TodoItem)) as TodoItem;
+                TodoItem target = ((FrameworkElement)e.OriginalSource).DataContext as TodoItem;
+
+                int oldIndex = TodoItems.IndexOf(droppedData);
+                int newIndex = TodoItems.IndexOf(target);
+
+                if (oldIndex != -1 && newIndex != -1)
+                {
+                    TodoItems.Move(oldIndex, newIndex);
+                    SaveTodoList(); // Save updated order
+                }
+            }
         }
 
         protected override void OnClosed(EventArgs e)
